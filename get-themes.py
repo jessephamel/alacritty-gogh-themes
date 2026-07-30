@@ -1,5 +1,5 @@
 import json
-import requests
+import urllib.request
 import os
 import unicodedata
 
@@ -7,7 +7,11 @@ def remove_accents(input_str):
     nfkd_form = unicodedata.normalize('NFKD', input_str)
     return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
 
-themes = json.loads(requests.get("https://raw.githubusercontent.com/Gogh-Co/Gogh/master/data/themes.json").text)
+with urllib.request.urlopen("https://raw.githubusercontent.com/Gogh-Co/Gogh/master/data/themes.json") as response:
+    raw_data = response.read()
+    text_data = raw_data.decode("utf-8")
+    themes = json.loads(text_data)
+
 for theme in themes:
     black = theme['color_01']
     red = theme['color_02']
@@ -52,6 +56,6 @@ blue = "{brightBlue}"
 magenta = "{brightMagenta}"
 cyan = "{brightCyan}"
 white = "{brightWhite}"
-    """
+"""
     with open(name, 'w', encoding='utf-8') as file:
         file.write(content)
